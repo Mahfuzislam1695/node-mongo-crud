@@ -15,27 +15,43 @@
         <button type="submit">Add Product</button>
     </form>
 
-    <div id="products">
+    <div id ="products">
 
     </div>
 
     <script>
-        function loadProduct() {
+        function loadProducts() {
 
         fetch('/products')
-        .then(response => response.json())
+        .then(res => res.json())
         .then(products => {
             console.log(products);
             const container = document.getElementById('products');
+            console.log(container);
             products.forEach(pd => {
                 const p = document.createElement('p');
-                p.innerHTML = `<strong>${pd.name}</strong> price: ${pd.price} quantity: ${pd.quantity} `;
+                p.innerHTML = `<strong>${pd.name}</strong> -- price: ${pd.price} quantity: ${pd.quantity} 
+                <button onclick="deleteProduct('${pd._id}')">delete</button>
+                `;
                 container.appendChild(p);
-            })
+                
+            });
         })
         }
 
-        loadProduct();
+        loadProducts();
+
+    function deleteProduct(id){
+        fetch(`/delete/${id}`,{
+           method: 'DELETE' 
+        })
+        .then(res => res.json())
+        .then(result =>{
+          console.log('deleted successfully');  
+        })
+    }    
+
+        
     </script>
 </body>
 </html>
